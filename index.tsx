@@ -512,10 +512,6 @@ const ChatWidget = () => {
     setIsLoading(true);
 
     try {
-      if (!process.env.API_KEY) {
-        throw new Error("API Key no encontrada. Por favor configure la variable de entorno.");
-      }
-
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       
       // Ensure history starts with user turn
@@ -556,8 +552,9 @@ const ChatWidget = () => {
       console.error("Chat error", error);
       let errorMessage = "Lo siento, tengo problemas para conectar con el servidor en este momento. Por favor, inténtalo de nuevo más tarde.";
       
-      if (error instanceof Error && error.message.includes("API Key")) {
-        errorMessage = "Error de configuración: Clave API no encontrada.";
+      // Improve error message for missing API key which is common in Vercel deployments
+      if (error instanceof Error && (error.message.includes("API Key") || error.message.includes("API key"))) {
+        errorMessage = "Error de configuración: Clave API no encontrada. Asegúrese de configurar la variable de entorno API_KEY en su panel de Vercel.";
       }
 
       setMessages(prev => [...prev, { role: 'model', text: errorMessage }]);
