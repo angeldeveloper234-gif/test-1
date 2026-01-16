@@ -554,7 +554,7 @@ const ChatWidget = () => {
       
       // Improve error message for missing API key which is common in Vercel deployments
       if (error instanceof Error && (error.message.includes("API Key") || error.message.includes("API key"))) {
-        errorMessage = "Error de configuración: Clave API no encontrada. Asegúrese de configurar la variable de entorno API_KEY en su panel de Vercel.";
+        errorMessage = "⚠️ Error de configuración: No se encontró la API Key. \n\nPara solucionar esto en Vercel:\n1. Ve a tu proyecto -> Settings -> Environment Variables.\n2. Agrega una nueva variable:\n   - Key: API_KEY\n   - Value: Tu clave de Google AI Studio.\n3. Redeploy tu aplicación.";
       }
 
       setMessages(prev => [...prev, { role: 'model', text: errorMessage }]);
@@ -595,7 +595,7 @@ const ChatWidget = () => {
           <div className="flex-1 overflow-y-auto p-4 bg-gray-50 flex flex-col gap-4">
             {messages.map((msg, idx) => (
               <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-[80%] p-3 rounded-2xl text-sm leading-relaxed ${
+                <div className={`max-w-[80%] p-3 rounded-2xl text-sm leading-relaxed whitespace-pre-line ${
                   msg.role === 'user' 
                     ? 'bg-brand-lime text-brand-dark rounded-tr-none font-medium' 
                     : 'bg-white text-gray-700 border border-gray-100 rounded-tl-none shadow-sm'
