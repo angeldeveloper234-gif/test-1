@@ -512,9 +512,17 @@ const ChatWidget = () => {
     setIsLoading(true);
 
     try {
+      if (!process.env.API_KEY) {
+        throw new Error("API Key no encontrada. Por favor configure la variable de entorno.");
+      }
+
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-      // Create history for context
-      const history = messages.map(m => ({
+      
+      // Ensure history starts with user turn
+      const firstUserIndex = messages.findIndex(m => m.role === 'user');
+      const validHistoryMessages = firstUserIndex !== -1 ? messages.slice(firstUserIndex) : [];
+      
+      const history = validHistoryMessages.map(m => ({
         role: m.role,
         parts: [{ text: m.text }]
       }));
@@ -546,7 +554,13 @@ const ChatWidget = () => {
 
     } catch (error) {
       console.error("Chat error", error);
-      setMessages(prev => [...prev, { role: 'model', text: "Lo siento, tengo problemas para conectar con el servidor en este momento. Por favor, inténtalo de nuevo más tarde." }]);
+      let errorMessage = "Lo siento, tengo problemas para conectar con el servidor en este momento. Por favor, inténtalo de nuevo más tarde.";
+      
+      if (error instanceof Error && error.message.includes("API Key")) {
+        errorMessage = "Error de configuración: Clave API no encontrada.";
+      }
+
+      setMessages(prev => [...prev, { role: 'model', text: errorMessage }]);
     } finally {
       setIsLoading(false);
     }
