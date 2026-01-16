@@ -36,11 +36,27 @@ import {
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
+  const handleScroll = (e: React.MouseEvent, id: string) => {
+    e.preventDefault();
+    const element = document.getElementById(id);
+    if (element) {
+      const headerOffset = 80; // Approximate height of sticky header
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.scrollY - headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+    }
+    setMobileMenuOpen(false);
+  };
+
   return (
     <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100 py-4">
       <div className="max-w-[1400px] mx-auto px-6 flex items-center justify-between">
         {/* Logo */}
-        <div className="flex items-center gap-2">
+        <a href="#home" onClick={(e) => handleScroll(e, 'home')} className="flex items-center gap-2 cursor-pointer">
           <div className="text-brand-lime">
              <Leaf className="w-6 h-6 fill-current" />
           </div>
@@ -48,22 +64,23 @@ const Header = () => {
             <span className="text-xl font-bold tracking-widest text-brand-dark leading-none">RUDRA</span>
             <span className="text-[0.6rem] tracking-widest text-gray-400 uppercase">Agencia de Negocios</span>
           </div>
-        </div>
+        </a>
 
         {/* Desktop Nav */}
         <div className="hidden lg:flex items-center gap-8 text-sm font-medium text-gray-600">
-          <a href="#" className="hover:text-brand-dark transition-colors">Inicio</a>
-          <a href="#" className="hover:text-brand-dark transition-colors">Nosotros</a>
-          <a href="#" className="text-brand-dark font-semibold relative after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-brand-lime after:-bottom-1 after:left-0">Servicios</a>
-          <a href="#" className="hover:text-brand-dark transition-colors">Casos</a>
-          <a href="#" className="hover:text-brand-dark transition-colors">Portafolio</a>
+          <a href="#home" onClick={(e) => handleScroll(e, 'home')} className="hover:text-brand-dark transition-colors">Inicio</a>
+          <a href="#about" onClick={(e) => handleScroll(e, 'about')} className="hover:text-brand-dark transition-colors">Nosotros</a>
+          <a href="#services" onClick={(e) => handleScroll(e, 'services')} className="text-brand-dark font-semibold relative after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-brand-lime after:-bottom-1 after:left-0">Servicios</a>
+          <a href="#cases" onClick={(e) => handleScroll(e, 'cases')} className="hover:text-brand-dark transition-colors">Casos</a>
+          {/* Mapping Portfolio to Services for demo purposes as requested */}
+          <a href="#services" onClick={(e) => handleScroll(e, 'services')} className="hover:text-brand-dark transition-colors">Portafolio</a>
           <a href="#" className="hover:text-brand-dark transition-colors">Blog</a>
-          <a href="#" className="hover:text-brand-dark transition-colors">Contacto</a>
+          <a href="#contact" onClick={(e) => handleScroll(e, 'contact')} className="hover:text-brand-dark transition-colors">Contacto</a>
         </div>
 
         {/* Right Actions */}
         <div className="hidden lg:flex items-center gap-6">
-          <button className="flex items-center gap-2 px-5 py-2.5 border border-gray-200 rounded-full hover:border-brand-lime transition-colors group">
+          <button onClick={(e) => handleScroll(e, 'contact')} className="flex items-center gap-2 px-5 py-2.5 border border-gray-200 rounded-full hover:border-brand-lime transition-colors group">
             <span className="text-sm font-medium">Contáctanos</span>
             <ArrowUpRight className="w-4 h-4 group-hover:text-brand-lime transition-colors" />
           </button>
@@ -95,10 +112,10 @@ const Header = () => {
       {/* Mobile Menu */}
       {mobileMenuOpen && (
         <div className="lg:hidden absolute top-full left-0 w-full bg-white border-t border-gray-100 py-4 px-6 flex flex-col gap-4 shadow-lg">
-          <a href="#" className="text-gray-600 font-medium">Inicio</a>
-          <a href="#" className="text-gray-600 font-medium">Nosotros</a>
-          <a href="#" className="text-brand-dark font-bold">Servicios</a>
-          <a href="#" className="text-gray-600 font-medium">Contacto</a>
+          <a href="#home" onClick={(e) => handleScroll(e, 'home')} className="text-gray-600 font-medium">Inicio</a>
+          <a href="#about" onClick={(e) => handleScroll(e, 'about')} className="text-gray-600 font-medium">Nosotros</a>
+          <a href="#services" onClick={(e) => handleScroll(e, 'services')} className="text-brand-dark font-bold">Servicios</a>
+          <a href="#contact" onClick={(e) => handleScroll(e, 'contact')} className="text-gray-600 font-medium">Contacto</a>
         </div>
       )}
     </nav>
@@ -106,8 +123,19 @@ const Header = () => {
 };
 
 const Hero = () => {
+  const handleScroll = (e: React.MouseEvent, id: string) => {
+    e.preventDefault();
+    const element = document.getElementById(id);
+    if (element) {
+      const headerOffset = 80;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.scrollY - headerOffset;
+      window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+    }
+  };
+
   return (
-    <section className="relative w-full">
+    <section id="home" className="relative w-full">
       <div className="relative h-[500px] w-full overflow-hidden">
         {/* Background Image */}
         <img 
@@ -124,7 +152,9 @@ const Hero = () => {
 
         {/* Breadcrumb Positioned Absolute */}
         <div className="absolute bottom-8 right-8 md:right-20 bg-white/90 backdrop-blur px-6 py-2 rounded-full text-sm font-medium text-gray-600">
-          Inicio <span className="text-brand-lime mx-2">→</span> <span className="text-brand-dark">Servicios</span>
+          <a href="#home" onClick={(e) => handleScroll(e, 'home')} className="hover:text-brand-dark">Inicio</a> 
+          <span className="text-brand-lime mx-2">→</span> 
+          <a href="#services" onClick={(e) => handleScroll(e, 'services')} className="text-brand-dark">Servicios</a>
         </div>
       </div>
       
@@ -136,7 +166,7 @@ const Hero = () => {
 
 const Intro = () => {
   return (
-    <section className="py-20 md:py-32 bg-white">
+    <section id="about" className="py-20 md:py-32 bg-white">
       <div className="max-w-[1400px] mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16">
         {/* Left Col */}
         <div>
@@ -213,7 +243,7 @@ const WhyChooseUs = () => {
   ];
 
   return (
-    <section className="py-20 bg-gray-50/50">
+    <section id="cases" className="py-20 bg-gray-50/50">
       <div className="max-w-[1400px] mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
           
@@ -355,7 +385,7 @@ const ServicesGrid = () => {
   ];
 
   return (
-    <section className="py-20 md:py-32 bg-gray-50">
+    <section id="services" className="py-20 md:py-32 bg-gray-50">
       <div className="max-w-[1400px] mx-auto px-6">
         <div className="text-center mb-16">
           <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-brand-dark/70 mb-4">
@@ -401,8 +431,19 @@ const ServicesGrid = () => {
 };
 
 const Footer = () => {
+  const handleScroll = (e: React.MouseEvent, id: string) => {
+    e.preventDefault();
+    const element = document.getElementById(id);
+    if (element) {
+      const headerOffset = 80;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.scrollY - headerOffset;
+      window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+    }
+  };
+
   return (
-    <footer className="bg-brand-dark text-white pt-20 pb-10">
+    <footer id="contact" className="bg-brand-dark text-white pt-20 pb-10">
       <div className="max-w-[1400px] mx-auto px-6">
         
         {/* Top Footer */}
@@ -474,11 +515,11 @@ const Footer = () => {
 
         {/* Bottom Links */}
         <div className="flex flex-wrap items-center justify-center md:justify-end gap-8 text-xs text-gray-400 uppercase tracking-wider font-medium">
-          <a href="#" className="hover:text-brand-lime transition-colors">Nosotros ↗</a>
-          <a href="#" className="hover:text-brand-lime transition-colors">Servicios ↗</a>
+          <a href="#about" onClick={(e) => handleScroll(e, 'about')} className="hover:text-brand-lime transition-colors">Nosotros ↗</a>
+          <a href="#services" onClick={(e) => handleScroll(e, 'services')} className="hover:text-brand-lime transition-colors">Servicios ↗</a>
           <a href="#" className="hover:text-brand-lime transition-colors">Equipo ↗</a>
           <a href="#" className="hover:text-brand-lime transition-colors">Premios ↗</a>
-          <a href="#" className="hover:text-brand-lime transition-colors">Contacto ↗</a>
+          <a href="#contact" onClick={(e) => handleScroll(e, 'contact')} className="hover:text-brand-lime transition-colors">Contacto ↗</a>
         </div>
 
       </div>
